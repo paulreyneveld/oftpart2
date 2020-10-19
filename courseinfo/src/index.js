@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const Course = ({ course }) => {
-  console.log(course.parts);
-  let sum = 0;
-  course.parts.forEach(part => sum += part.exercises );
-  console.log(sum);
+
+  let { parts } = course;
+  let sum = parts.reduce((acc, part) => acc + part.exercises, 0);
+
   return (
     <>
     <h1>{course.name}</h1>
