@@ -46,9 +46,17 @@ const App = () => {
         setNewNumber(event.target.value);
     }
 
+    const handleSearch = (event) => {
+        console.log(event.target.value);
+        let test = persons.filter(person => person.name.includes(event.target.value));
+        console.log(test);
+    }
+
     return (
         <div>
             <h2>Phonebook</h2>
+            <label>filter on basis of: </label>
+            <input onChange={handleSearch} />
             <form onSubmit={addPerson}>
             <div>
                 name: <input value={newName} onChange={handleNewPerson} />
