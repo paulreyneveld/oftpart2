@@ -1,4 +1,7 @@
-phonebook/node_modules
 courseinfo/node_modules
+phonebook/node_modules
+dataforcountries/node_modules
 .DS_Store
 courseinfo/.DS_Store
+phonebook/.DS_Store
+dataforcountries/node_modules
