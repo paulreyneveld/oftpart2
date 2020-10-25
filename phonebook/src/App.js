@@ -3,6 +3,7 @@ import Filter from './components/filter';
 import PersonForm from './components/personform';
 import Person from './components/person';
 import peopleService from './services/people';
+import axios from 'axios';
 
 const App = () => {
 
@@ -12,13 +13,13 @@ const App = () => {
     const [ newSearch, setNewSearch ] = useState([]);
 
     const getDataHook = () => {
-            peopleService
-            .getAll()
-            .then(persons => {
-                setPersons(persons);
-            });
+        peopleService
+        .getAll()
+        .then(persons => {
+            setPersons(persons);
+        });
     }
-    
+
     useEffect(getDataHook, []);
 
     const addPerson = (event) => {
@@ -26,7 +27,7 @@ const App = () => {
         const personObject = {
             name: newName,
             number: newNumber,
-            id: persons.length + 1
+            id: newNumber
         }
 
         let dummyBool = false;
@@ -67,6 +68,15 @@ const App = () => {
         setNewSearch(event.target.value.toLowerCase());
     }
 
+    const handleDelete = (id) => {
+        let forSure = window.confirm("Delete this person?");
+        if (forSure) {
+            axios.delete(`http://localhost:3001/persons/${id}`)
+            .then(peopleService.getAll().then(persons => setPersons(persons)))
+            .catch(error => console.log(error));
+        }
+    }
+
     return (
         <div>
             <h2>Phonebook</h2>
@@ -83,6 +93,7 @@ const App = () => {
             <Person 
                 persons={persons}
                 newSearch={newSearch}
+                handleDelete={handleDelete}
             />
         </div>
     )
