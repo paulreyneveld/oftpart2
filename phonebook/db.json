@@ -29,6 +29,21 @@
       "name": "Jane Doe",
       "number": "345-1234",
       "id": 6
+    },
+    {
+      "name": "Jack Cousteau",
+      "number": "432-2341",
+      "id": 7
+    },
+    {
+      "name": "Rachel",
+      "number": "Klok",
+      "id": 8
+    },
+    {
+      "name": "Rachel Klok",
+      "number": "5234-2341",
+      "id": 9
     }
   ]
 }

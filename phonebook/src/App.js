@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Filter from './components/filter';
 import PersonForm from './components/personform';
 import Person from './components/person';
+import peopleService from './services/people';
 
 const App = () => {
 
@@ -12,10 +12,10 @@ const App = () => {
     const [ newSearch, setNewSearch ] = useState([]);
 
     const getDataHook = () => {
-        axios
-            .get("http://localhost:3001/persons")
-            .then(response => {
-                setPersons(response.data);
+            peopleService
+            .getAll()
+            .then(persons => {
+                setPersons(persons);
             });
     }
     
@@ -45,8 +45,9 @@ const App = () => {
             alert(`${newName} already exists in phonebook`);
         }
         else {
-            axios.post('http://localhost:3001/persons', personObject)
-            .then(response => console.log(response));
+            peopleService
+            .create(personObject)
+            .then(newPerson => console.log(newPerson));
 
             setPersons(persons.concat(personObject));
             setNewName('');
