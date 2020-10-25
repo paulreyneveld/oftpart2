@@ -5,3 +5,4 @@ dataforcountries/node_modules
 courseinfo/.DS_Store
 phonebook/.DS_Store
 dataforcountries/node_modules
+dataforcountries/.env
