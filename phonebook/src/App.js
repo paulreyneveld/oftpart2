@@ -4,6 +4,16 @@ import PersonForm from './components/personform';
 import Person from './components/person';
 import peopleService from './services/people';
 import axios from 'axios';
+import './index.css';
+
+const UserMessage = ({ message }) => {
+    if (message === null) {
+        return null;
+    }
+    return (
+        <p className="success">{message.message} {message.user} </p>
+    )
+}
 
 const App = () => {
 
@@ -11,6 +21,7 @@ const App = () => {
     const [ newName, setNewName ] = useState('');
     const [ newNumber, setNewNumber ] = useState('');
     const [ newSearch, setNewSearch ] = useState([]);
+    const [ userMessage, setUserMessage ] = useState({message: null, user: null});
 
     const getDataHook = () => {
         peopleService
@@ -48,7 +59,11 @@ const App = () => {
         else {
             peopleService
             .create(personObject)
-            .then(newPerson => console.log(newPerson));
+            .then(newPerson => {
+                console.log(newPerson);
+                setUserMessage({message: 'Success, created', user: newPerson.name});
+                setTimeout(() => setUserMessage(null), 2000);
+            });
 
             setPersons(persons.concat(personObject));
             setNewName('');
@@ -72,13 +87,19 @@ const App = () => {
         let forSure = window.confirm("Delete this person?");
         if (forSure) {
             axios.delete(`http://localhost:3001/persons/${id}`)
-            .then(peopleService.getAll().then(persons => setPersons(persons)))
+            .then(peopleService.getAll().then(persons => {
+                setPersons(persons);
+                setUserMessage({message: 'Success, deleted', user: null});
+                setTimeout(() => setUserMessage(null), 2000);
+            }
+            ))
             .catch(error => console.log(error));
         }
     }
 
     return (
         <div>
+            <UserMessage message={userMessage} newName={newName} />
             <h2>Phonebook</h2>
             <Filter handleSearch={handleSearch} />
             <h2>Add a new person</h2>
