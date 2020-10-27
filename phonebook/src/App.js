@@ -3,7 +3,7 @@ import Filter from './components/filter';
 import PersonForm from './components/personform';
 import Person from './components/person';
 import peopleService from './services/people';
-import axios from 'axios';
+// import axios from 'axios';
 import './index.css';
 
 const UserMessage = ({ message }) => {
@@ -11,7 +11,7 @@ const UserMessage = ({ message }) => {
         return null;
     }
     return (
-        <p className="success">{message.message} {message.user} </p>
+        <p className="success">{message}</p>
     )
 }
 
@@ -21,7 +21,7 @@ const App = () => {
     const [ newName, setNewName ] = useState('');
     const [ newNumber, setNewNumber ] = useState('');
     const [ newSearch, setNewSearch ] = useState([]);
-    const [ userMessage, setUserMessage ] = useState({message: null, user: null});
+    const [ userMessage, setUserMessage ] = useState(null);
 
     const getDataHook = () => {
         peopleService
@@ -56,12 +56,13 @@ const App = () => {
         if (dummyBool) {
             alert(`${newName} already exists in phonebook`);
         }
+
         else {
             peopleService
             .create(personObject)
             .then(newPerson => {
                 console.log(newPerson);
-                setUserMessage({message: 'Success, created', user: newPerson.name});
+                setUserMessage(`Successfully created ${newPerson.name}`);
                 setTimeout(() => setUserMessage(null), 2000);
             });
 
@@ -83,17 +84,18 @@ const App = () => {
         setNewSearch(event.target.value.toLowerCase());
     }
 
-    const handleDelete = (id) => {
+    const deletePerson = (id) => {
+        let deletionTarget = persons.find(person => person.id === id);
         let forSure = window.confirm("Delete this person?");
         if (forSure) {
-            axios.delete(`http://localhost:3001/persons/${id}`)
-            .then(peopleService.getAll().then(persons => {
-                setPersons(persons);
-                setUserMessage({message: 'Success, deleted', user: null});
-                setTimeout(() => setUserMessage(null), 2000);
-            }
-            ))
-            .catch(error => console.log(error));
+            peopleService.remove(id)
+              .then(response => {
+                  setPersons(persons.filter(person => person.id !== id))
+                  setUserMessage(`Successfully deleted ${deletionTarget.name}`);
+              })
+              .catch(() => {
+                  setPersons(persons.filter(person => person.id !== id))
+              })
         }
     }
 
@@ -114,7 +116,7 @@ const App = () => {
             <Person 
                 persons={persons}
                 newSearch={newSearch}
-                handleDelete={handleDelete}
+                handleDelete={deletePerson}
             />
         </div>
     )
