@@ -3,7 +3,6 @@ import Filter from './components/filter';
 import PersonForm from './components/personform';
 import Person from './components/person';
 import peopleService from './services/people';
-// import axios from 'axios';
 import './index.css';
 
 const UserMessage = ({ message }) => {
@@ -27,6 +26,7 @@ const App = () => {
         peopleService
         .getAll()
         .then(persons => {
+            console.log(persons);
             setPersons(persons);
         });
     }
@@ -90,11 +90,12 @@ const App = () => {
         if (forSure) {
             peopleService.remove(id)
               .then(response => {
-                  setPersons(persons.filter(person => person.id !== id))
+                  setPersons(persons.filter(person => person.id !== id));
                   setUserMessage(`Successfully deleted ${deletionTarget.name}`);
+                  setTimeout(() => setUserMessage(null), 2000);
               })
               .catch(() => {
-                  setPersons(persons.filter(person => person.id !== id))
+                  setPersons(persons.filter(person => person.id !== id));
               })
         }
     }
