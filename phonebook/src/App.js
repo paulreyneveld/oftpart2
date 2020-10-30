@@ -64,7 +64,8 @@ const App = () => {
                 console.log(newPerson);
                 setUserMessage(`Successfully created ${newPerson.name}`);
                 setTimeout(() => setUserMessage(null), 2000);
-            });
+            })
+            .catch(err => { setUserMessage(err)});
 
             setPersons(persons.concat(personObject));
             setNewName('');
